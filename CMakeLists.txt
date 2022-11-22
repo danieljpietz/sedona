@@ -3,7 +3,7 @@ project(sedona CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SEDONA_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(SEDONA_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/sedona)
 
 # Print the current version from the CONFIG file
 # ==============================================
@@ -21,14 +21,14 @@ message(STATUS "sedona v${${PROJECT_NAME}_VERSION}")
 
 
 set(SEDONA_HEADERS
-        include/sedona.h
-        include/okc.h
-        include/mt_okc.h
-        include/okc_differential_types.h
-        include/okc_link.h
-        include/okc_math.h
-        include/okc_system.h
-        include/okc_types.h include/sedona_config.h)
+        include/sedona/sedona.h
+        include/sedona/okc.h
+        include/sedona/mt_okc.h
+        include/sedona/okc_differential_types.h
+        include/sedona/okc_link.h
+        include/sedona/okc_math.h
+        include/sedona/okc_system.h
+        include/sedona/okc_types.h include/sedona/sedona_config.h)
 
 add_library(sedona INTERFACE)
 

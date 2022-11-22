@@ -2,8 +2,8 @@
 #define SEDONA_OKC_LINK_H
 
 #include <Eigen/Eigen>
-#include <okc_differential_types.h>
-#include <okc_math.h>
+#include "okc_differential_types.h"
+#include "okc_math.h"
 
 namespace sedona {
     enum link_type_t {
