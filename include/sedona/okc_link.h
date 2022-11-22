@@ -99,7 +99,7 @@ namespace sedona {
 
                 case Prismatic:
                     this->frame_l.position =
-                            this->offset.position + this->axis * d_x[this->idx];
+                            this->offset.position + this->axis * x[this->idx];
                     break;
             }
         }
