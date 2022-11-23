@@ -9,7 +9,7 @@
 #include <array>
 
 namespace sedona {
-    template<class T, size_t N>
+    template<class T, int N>
     struct Frame {
 
         Eigen::Matrix3 <T> rotation = Eigen::Matrix3<T>::Identity();
@@ -32,7 +32,7 @@ namespace sedona {
         const Eigen::Matrix3 <T> inertia;
     };
 
-    template<class T, size_t N>
+    template<class T, int N>
     struct Dynamics_State {
 
         Eigen::Matrix <T, N, N> mass_matrix;
@@ -61,7 +61,7 @@ namespace sedona {
             forces += rhs.centrifugal;
         }
 
-        template<size_t N_RHS>
+        template<int N_RHS>
         void operator+=(Dynamics_State<T, N_RHS> rhs) {
             static_assert(N_RHS <= N,
                           "YOUR LINK HAS MORE DIMENSIONS THAN THE ENTIRE SYSTEM");
@@ -71,7 +71,7 @@ namespace sedona {
         }
     };
 
-    template<class T, size_t N>
+    template<class T, int N>
     struct LinkDynamicsState : public Dynamics_State<T, N> {
 
         Eigen::Matrix<T, 6, 6> local_mass_matrix;

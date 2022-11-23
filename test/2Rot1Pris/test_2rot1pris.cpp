@@ -1,6 +1,8 @@
 #include "../../include/sedona/sedona.h"
 #include "codegen/doublePendulumDerivative.h"
 #include <random>
+#include <cassert>
+#include <iostream>
 
 using namespace sedona;
 
@@ -58,7 +60,7 @@ public:
 
 };
 
-bool test_2rot1pris() {
+int main() {
 
     // Generate a random configuration for the system
 
@@ -84,12 +86,9 @@ bool test_2rot1pris() {
                              theta_2, theta_3, d_xddot);
 
     // Compare the results
-    for (size_t i = 0; i < 36; ++i) {
-        if (std::abs(d_xddot[i] - accel.data()[i]) > 1e-6) {
-            return false;
-        }
-    }
+    for (int i = 0; i < 36; ++i)
+        assert(std::abs(d_xddot[i] - accel.data()[i]) < 1e-6);
 
-    return true;
+    return 0;
 
 }

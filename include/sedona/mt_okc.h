@@ -12,7 +12,7 @@
 #include <mutex>
 #include <condition_variable>
 namespace sedona {
-    template<class T, size_t N>
+    template<class T, int N>
     class MT_OKC : public OKC<T, N> {
 
         std::array<std::thread, 6 * N> _threads;
@@ -114,7 +114,7 @@ namespace sedona {
         virtual void set_links(std::array<Link<T, N> *, N> links) override {
             OKC<T, N>::set_links(links);
 
-            size_t thread_index = 0;
+            int thread_index = 0;
 
             for (auto link: this->_links) {
                 _threads[thread_index++] = std::thread(&MT_OKC::_local_kinematics_worker, this, link);
@@ -132,7 +132,7 @@ namespace sedona {
 
     };
 
-    template<class T, size_t N>
+    template<class T, int N>
     class MT_Link : public Link<T, N> {
 
     public:

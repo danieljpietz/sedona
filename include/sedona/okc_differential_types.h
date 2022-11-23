@@ -5,7 +5,7 @@
 #include "okc_types.h"
 
 namespace sedona {
-    template<class T, size_t N>
+    template<class T, int N>
     struct DifferentialFrame {
 
         Tensor<T, N, 3, 3> rotation = Tensor_Zero<T, N, 3, 3>();
@@ -21,7 +21,7 @@ namespace sedona {
         Tensor<T, N, 6, N> dot_jacobian = Tensor_Zero<T, N, 6, N>();
     };
 
-    template<class T, size_t N>
+    template<class T, int N>
     struct Differential_Dynamics_State {
 
         Tensor<T, N, N, N> mass_matrix;
@@ -51,14 +51,14 @@ namespace sedona {
         }
     };
 
-    template<class T, size_t N>
+    template<class T, int N>
     void differential_kinematics_(const Frame<T, N> &parent_g,
                                   const DifferentialFrame<T, N> &d_parent_g,
                                   const Frame<T, N> &frame_l,
                                   const DifferentialFrame<T, N> &d_frame_l,
                                   const Frame<T, N> &frame_g,
                                   DifferentialFrame<T, N> &d_frame_g,
-                                  size_t idx = N) {
+                                  int idx = N) {
 
         d_frame_g.rotation = d_parent_g.rotation * frame_l.rotation +
                              parent_g.rotation * d_frame_l.rotation;
@@ -73,7 +73,7 @@ namespace sedona {
                             tvp(d_frame_g.rotation, frame_l.ang_vel) +
                             frame_g.rotation * d_frame_l.ang_vel;
 
-        for (size_t i = 0; i <= idx; ++i) {
+        for (int i = 0; i <= idx; ++i) {
 
             d_frame_g.jacobian_pmap[i].template block<3, 3>(0, 0) =
                     d_frame_l.rotation[i].transpose();
@@ -121,7 +121,7 @@ namespace sedona {
         }
     }
 
-    template<class T, size_t N>
+    template<class T, int N>
     void differential_dynamics_(const MassSpec<T> &mass_spec,
                                 const Frame<T, N> &frame_g,
                                 const DifferentialFrame<T, N> &d_frame_g,
@@ -135,7 +135,7 @@ namespace sedona {
         const Eigen::Vector3 <T> mass_com = mass * com;
         const Eigen::Matrix3 <T> inertia = mass_spec.inertia;
 
-        for (size_t i = 0; i <= idx; ++i) {
+        for (int i = 0; i <= idx; ++i) {
             Eigen::Matrix<T, 3, 3> d_m_corner =
                     skew(mass_spec.com) * d_frame_g.rotation[i].transpose();
 

@@ -4,13 +4,13 @@
 #include <Eigen/Eigen>
 
 namespace sedona {
-    template<class T, size_t pages, size_t rows, size_t cols>
+    template<class T, int pages, int rows, int cols>
     using Tensor = Eigen::Vector <Eigen::Matrix<T, rows, cols>, pages>;
 
-    template<class T, size_t pages, size_t rows, size_t cols>
+    template<class T, int pages, int rows, int cols>
     Tensor<T, pages, rows, cols> Tensor_Zero() {
         Tensor<T, pages, rows, cols> ret;
-        for (size_t i = 0; i < pages; ++i)
+        for (int i = 0; i < pages; ++i)
             ret[i] = Eigen::Matrix<T, rows, cols>::Zero();
         return ret;
     }
@@ -25,7 +25,7 @@ namespace sedona {
     template<class T, int N>
     Tensor<T, N, 3, 3> skew3(const Eigen::Matrix<T, 3, N> &m) {
         Tensor<T, N, 3, 3> ret;
-        for (size_t i = 0; i < N; ++i) {
+        for (int i = 0; i < N; ++i) {
 
             const Eigen::Vector3 <T> v = m.col(i);
 
@@ -40,7 +40,7 @@ namespace sedona {
     operator*(Tensor<T, DEPTH, N_ROWS, N_COLS> n,
               Tensor<T, DEPTH, N_COLS, M_COLS> m) {
         Tensor<T, DEPTH, N_ROWS, M_COLS> result;
-        for (size_t i = 0; i < DEPTH; ++i)
+        for (int i = 0; i < DEPTH; ++i)
             result[i] = n[i] * m[i];
         return result;
     }
@@ -51,7 +51,7 @@ namespace sedona {
     operator*(Eigen::Matrix <T, N_ROWS, N_COLS> n,
               Tensor<T, DEPTH, N_COLS, M_COLS> m) {
         Tensor<T, DEPTH, N_ROWS, M_COLS> result;
-        for (size_t i = 0; i < DEPTH; ++i)
+        for (int i = 0; i < DEPTH; ++i)
             result[i] = n * m[i];
         return result;
     }
@@ -62,7 +62,7 @@ namespace sedona {
     operator*(Tensor<T, DEPTH, N_ROWS, N_COLS> n,
               Eigen::Matrix <T, N_COLS, M_COLS> m) {
         Tensor<T, DEPTH, N_ROWS, M_COLS> result;
-        for (size_t i = 0; i < DEPTH; ++i)
+        for (int i = 0; i < DEPTH; ++i)
             result[i] = n[i] * m;
         return result;
     }
@@ -72,7 +72,7 @@ namespace sedona {
     inline Eigen::Matrix <T, N_ROWS, DEPTH> tvp(Tensor<T, DEPTH, N_ROWS, N_COLS> n,
                                                 Eigen::Vector <T, N_COLS> m) {
         Eigen::Matrix <T, N_ROWS, DEPTH> result;
-        for (size_t i = 0; i < DEPTH; ++i)
+        for (int i = 0; i < DEPTH; ++i)
             result.col(i) = n[i] * m;
         return result;
     }

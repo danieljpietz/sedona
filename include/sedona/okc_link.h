@@ -10,16 +10,13 @@ namespace sedona {
         Revolute, Prismatic
     };
 
-    template<class T, size_t N>
-    class OKC;
-
-    template<class T, size_t N>
+    template<class T, int N>
     class MT_OKC;
 
-    template<class T, size_t N>
+    template<class T, int N>
     struct Link {
 
-        size_t idx;
+        int idx;
         const std::string name;
         const Link *parent = nullptr;
         const link_type_t link_type;
@@ -59,8 +56,8 @@ namespace sedona {
 
                 // TODO: Bug causes frame_g = frame_l to crash in debug if vectorization
                 // is enabled
-                for (size_t j = 0; j < N; ++j) {
-                    for (size_t i = 0; i < 6; ++i) {
+                for (int j = 0; j < N; ++j) {
+                    for (int i = 0; i < 6; ++i) {
                         frame_g.jacobian(i, j) = frame_l.jacobian(i, j);
                     }
                 }

@@ -7,12 +7,14 @@
 #include <map>
 
 namespace sedona {
-    template<class T, size_t N>
-    class OKC {
 
+    template<class T, int N, class STORAGE_CLASS>
+    class OKCBase {
     protected:
+
+        int dof = N;
         T _time = 0;
-        std::array<Link<T, N> *, N> _links;
+        STORAGE_CLASS _links;
 
         Eigen::Vector <T, N> _x;
         Eigen::Vector <T, N> _dot_x;
@@ -25,18 +27,10 @@ namespace sedona {
         Differential_Dynamics_State <T, N> dx_dynamics_state;
         Differential_Dynamics_State <T, N> ddx_dynamics_state;
 
+        OKCBase() {}
 
-        explicit OKC(std::array<Link<T, N> *, N> links) : _links(links) {
-            for (auto link: _links) {
-                assert(link->parent->idx < link->idx);
-                link->init();
-            }
-        }
-
-        OKC() {}
-
-        virtual void set_links(std::array<Link<T, N> *, N> links) {
-            for (size_t i = 0; i < N; ++i) {
+        virtual void set_links(STORAGE_CLASS links) {
+            for (int i = 0; i < dof; ++i) {
                 Link<T, N> *link = links[i];
                 link->idx = i;
                 link->init();
@@ -65,7 +59,7 @@ namespace sedona {
 
             _ddot_x = system_mass_inverse * (-_dynamics_state.centrifugal);
 
-            for (size_t i = 0; i < N; ++i) {
+            for (int i = 0; i < N; ++i) {
                 _dx_ddot_x.col(i) =
                         system_mass_inverse * (-dx_dynamics_state.centrifugal.col(i) -
                                                dx_dynamics_state.mass_matrix[i] * _ddot_x);
@@ -83,6 +77,7 @@ namespace sedona {
         }
 
     public:
+
         inline const Eigen::Vector <T, N> &pos() const { return _x; }
 
         inline const Eigen::Vector <T, N> &vel() const { return _dot_x; }
@@ -117,13 +112,13 @@ namespace sedona {
         std::map <std::string, Eigen::Vector<T, Eigen::Dynamic>>
         simulate(T runtime, T step_size) {
 
-            size_t len = runtime / step_size;
+            int len = runtime / step_size;
             Eigen::Matrix <T, N, Eigen::Dynamic> positions =
                     Eigen::Matrix<T, N, Eigen::Dynamic>(N, len);
             Eigen::Matrix <T, N, Eigen::Dynamic> velocities =
                     Eigen::Matrix<T, N, Eigen::Dynamic>(N, len);
 
-            for (size_t i = 0; i < len; ++i) {
+            for (int i = 0; i < len; ++i) {
                 _time += step_size;
                 positions.col(i) = this->pos();
                 velocities.col(i) = this->vel();
@@ -150,6 +145,13 @@ namespace sedona {
 
         virtual void update() {}
     };
+
+    template<class T, int N>
+    using OKC = OKCBase<T, N, std::array<Link<T, N> *, N>>;
+
+    template<class T>
+    using DynamicOKC = OKCBase<T, Eigen::Dynamic, std::vector<Link<T, Eigen::Dynamic> *>>;
+
 }
 
 #endif // SEDONA_OKC_SYSTEM_H
