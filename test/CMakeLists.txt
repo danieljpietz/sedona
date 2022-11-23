@@ -3,9 +3,7 @@ project(sedona_tests CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
-find_package(Eigen3 REQUIRED)
-include_directories(${EIGEN3_INCLUDE_DIR})
+include_directories(include)
 
 enable_testing()
 
