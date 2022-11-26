@@ -28,7 +28,9 @@ set(SEDONA_HEADERS
         include/sedona/okc_link.h
         include/sedona/okc_math.h
         include/sedona/okc_system.h
-        include/sedona/okc_types.h include/sedona/sedona_config.h)
+        include/sedona/okc_types.h
+        include/sedona/sedona_config.h
+        include/sedona/utils/StaticList.h)
 
 add_library(sedona INTERFACE)
 
